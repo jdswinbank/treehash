@@ -2,12 +2,17 @@
 
 import sys
 import hashlib
+from cStringIO import StringIO
+
+MEGABYTE=1024**2
 
 class TreeHash(object):
-    def __init__(self, filename, algo=hashlib.sha256, bsize=1024*1024):
-        self.filename = filename
+    def __init__(self, data="", algo=hashlib.sha256, block_size=MEGABYTE):
         self.algo = algo
-        self.bsize = bsize
+        self.block_size = block_size
+        self.pending = StringIO()
+        self.hashes = []
+        self.update(data)
 
     def _compute_hash(self):
         def recursive_hash(hashlist):
@@ -21,22 +26,38 @@ class TreeHash(object):
             else:
                 return output[0]
 
-        hashes = []
-        with open(self.filename, 'rb') as my_file:
-            while True:
-                block = my_file.read(self.bsize)
-                if not block:
-                    break
-                hashes.append(self.algo(block))
+        to_recurse = self.hashes[:]
+        self.pending.seek(0)
+        extra = self.pending.read()
+        if extra:
+            to_recurse.append(self.algo(extra))
+        return recursive_hash(to_recurse)
 
-        return recursive_hash(hashes)
+    def update(self, data):
+        self.pending.write(data)
+        self.pending.seek(0)
+        new_buffer = StringIO()
+        while True:
+            block = self.pending.read(self.block_size)
+            if len(block) == self.block_size:
+                self.hashes.append(self.algo(block))
+            else:
+                new_buffer.write(block)
+                break
+        self.pending = new_buffer
 
-    def get_digest(self):
+    def digest(self):
         return self._compute_hash().digest()
 
-    def get_hexdigest(self):
+    def hexdigest(self):
         return self._compute_hash().hexdigest()
 
 if __name__ == "__main__":
     for fname in sys.argv[1:]:
-        print "%s: %s" % (fname, TreeHash(fname).get_hexdigest())
+        with open(fname, 'rb') as my_file:
+            treehash = TreeHash()
+            while True:
+                data = my_file.read(MEGABYTE)
+                treehash.update(data)
+                if len(data) < (MEGABYTE): break
+            print "%s: %s" % (fname, treehash.hexdigest())
