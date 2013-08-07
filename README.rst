@@ -7,7 +7,7 @@ Calculates a SHA256 (or, potentially, any other ``hashlib`` supported function)
 
 Command line usage::
 
-  $ treehash.py <filename> ...
+  $ treehash <filename> ...
 
 As a library, we follow the ``hashlib`` conventions. That is::
 

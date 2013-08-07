@@ -1,2 +1,2 @@
-from treehash.treehash import TreeHash
+from .treehash import TreeHash
 __all__ = ["TreeHash"]

@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 import sys
 import hashlib
 from io import BytesIO
@@ -51,13 +49,3 @@ class TreeHash(object):
 
     def hexdigest(self):
         return self._compute_hash().hexdigest()
-
-if __name__ == "__main__":
-    for fname in sys.argv[1:]:
-        with open(fname, 'rb') as my_file:
-            treehash = TreeHash()
-            while True:
-                data = my_file.read(MEGABYTE)
-                treehash.update(data)
-                if len(data) < (MEGABYTE): break
-            print("%s: %s" % (fname, treehash.hexdigest()))
