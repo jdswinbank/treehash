@@ -13,8 +13,8 @@ As a library, we follow the ``hashlib`` conventions. That is::
 
   >>> from treehash import TreeHash
   >>> treehash = TreeHash()
-  >>> treehash.update("Nobody inspects")
-  >>> treehash.update(" the spammish repetition")
+  >>> treehash.update(b"Nobody inspects")
+  >>> treehash.update(b" the spammish repetition")
   >>> treehash.digest()
   '\x03\x1e\xdd}Ae\x15\x93\xc5\xfe\\\x00o\xa5u+7\xfd\xdf\xf7\xbcN\x84:\xa6\xaf\x0c\x95\x0fK\x94\x06'
   >>> treehash.hexdigest()

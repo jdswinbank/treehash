@@ -2,15 +2,15 @@
 
 import sys
 import hashlib
-from cStringIO import StringIO
+from io import BytesIO
 
 MEGABYTE=1024**2
 
 class TreeHash(object):
-    def __init__(self, data="", algo=hashlib.sha256, block_size=MEGABYTE):
+    def __init__(self, data=b"", algo=hashlib.sha256, block_size=MEGABYTE):
         self.algo = algo
         self.block_size = block_size
-        self.pending = StringIO()
+        self.pending = BytesIO()
         self.hashes = []
         self.update(data)
 
@@ -36,7 +36,7 @@ class TreeHash(object):
     def update(self, data):
         self.pending.write(data)
         self.pending.seek(0)
-        new_buffer = StringIO()
+        new_buffer = BytesIO()
         while True:
             block = self.pending.read(self.block_size)
             if len(block) == self.block_size:
@@ -60,4 +60,4 @@ if __name__ == "__main__":
                 data = my_file.read(MEGABYTE)
                 treehash.update(data)
                 if len(data) < (MEGABYTE): break
-            print "%s: %s" % (fname, treehash.hexdigest())
+            print("%s: %s" % (fname, treehash.hexdigest()))
