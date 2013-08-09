@@ -6,6 +6,7 @@ setup(
     packages=['treehash'],
     scripts=['bin/treehash'],
     license="Simplified BSD",
+    description="Tree Hash Calculator",
     long_description=open('README.rst').read(),
     url="http://github.com/jdswinbank/treehash",
     author="John Swinbank",
