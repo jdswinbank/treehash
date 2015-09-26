@@ -29,7 +29,7 @@ class TreeHash(object):
         extra = self.pending.read()
         if extra:
             to_recurse.append(self.algo(extra))
-        return recursive_hash(to_recurse)
+        return recursive_hash(to_recurse or [self.algo(b"")])
 
     def update(self, data):
         self.pending.write(data)

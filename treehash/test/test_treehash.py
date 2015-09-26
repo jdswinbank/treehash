@@ -39,3 +39,9 @@ class TreeHashTestCase(unittest.TestCase):
         self.assertEqual(hashlib_result,
             TreeHash(2*TEST_DATA, block_size=1).hexdigest()
         )
+
+    def test_empty(self):
+        self.assertEqual(
+            hashlib.sha256().hexdigest(),
+            TreeHash().hexdigest()
+        )
