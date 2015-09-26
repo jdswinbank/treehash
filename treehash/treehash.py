@@ -2,7 +2,7 @@ import sys
 import hashlib
 from io import BytesIO
 
-MEGABYTE=1024**2
+MEGABYTE = 1024**2
 
 class TreeHash(object):
     def __init__(self, data=b"", algo=hashlib.sha256, block_size=MEGABYTE):
@@ -14,9 +14,8 @@ class TreeHash(object):
 
     def _compute_hash(self):
         def recursive_hash(hashlist):
-            output = []
-            for h1, h2 in zip(hashlist[::2], hashlist[1::2]):
-                output.append(self.algo(h1.digest() + h2.digest()))
+            output = [self.algo(h1.digest() + h2.digest())
+                      for h1, h2 in zip(hashlist[::2], hashlist[1::2])]
             if len(hashlist) % 2:
                 output.append(hashlist[-1])
             if len(output) > 1:
