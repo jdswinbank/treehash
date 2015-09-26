@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name="TreeHash",
-    version="1.0",
+    version="1.0.1",
     packages=['treehash'],
     scripts=['bin/treehash'],
     license="Simplified BSD",
